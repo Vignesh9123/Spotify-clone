@@ -9,7 +9,7 @@ var currFolder = "";
 async function getSongs(folder){
     if(folder!=undefined)
     currFolder = folder
-    let a = await fetch(`./songs/${currFolder}`)
+    let a = await fetch(`https://github.com/Vignesh9123/Spotify-clone/raw/main/songs/${currFolder}`)
     let html = await a.text()
     let div = document.createElement("div")
     div.innerHTML = html
@@ -94,7 +94,7 @@ function converttominutes(seconds){
 
   
 async function displayAlbums(){
-    let a = await fetch('./songs/')
+    let a = await fetch('https://github.com/Vignesh9123/Spotify-clone/raw/main/songs/')
     let htm = await a.text();
     let div = document.createElement("div")
     div.innerHTML = htm
@@ -109,11 +109,11 @@ async function displayAlbums(){
             let ht;
             try{
 
-                xm = await fetch(`./songs/${folder}/info.json`)
+                xm = await fetch(`https://github.com/Vignesh9123/Spotify-clone/raw/main/songs/${folder}/info.json`)
                 ht = await xm.json()
                 cardscontainer.innerHTML = cardscontainer.innerHTML+`<div class="trackcard" data-folder="${folder}">
         <div class="img">
-        <img src="./songs/${folder}/cover.jpg" alt="">
+        <img src="https://github.com/Vignesh9123/Spotify-clone/raw/main/songs/${folder}/cover.jpg" alt="">
         <svg data-encore-id="icon" role="img" aria-hidden="true" viewBox="0 0 24 24" class="Svg-sc-ytk21e-0 bneLcE"><path d="m7.05 3.606 13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z"></path></svg>
         
     </div><div class="tracktitle">
