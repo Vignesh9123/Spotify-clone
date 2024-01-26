@@ -1,3 +1,4 @@
+
 let currentSong = new Audio()
 var isPlaying = false;
 let dark  = true;
@@ -9,16 +10,12 @@ var currFolder = "";
 async function getSongs(folder){
     if(folder!=undefined)
     currFolder = folder
-    let a = await fetch(`https://github.com/Vignesh9123/Spotify-clone/raw/main/songs/${currFolder}`)
-    let html = await a.text()
-    let div = document.createElement("div")
-    div.innerHTML = html
-    let ul = div.getElementsByTagName("ul")
-    let ulch = ul[0].children
+    let gitl = await fetch(`https://github.com/Vignesh9123/Spotify-clone/raw/main/songs/${currFolder}`)
+    let gittxt = await gitl.json()
     songs = []
-    for(let i = 1; i<ulch.length;i++){
-        let song = ulch[i].children[0]
-        if(song.href.endsWith(".mp3"))
+    for(let i = 0; i<gittxt.payload.tree.items.length;i++){
+        let song = gittxt.payload.tree.items[i]
+        if(song.path.endsWith(".mp3"))
         songs.push(song)
     }
     let songscontainer = document.body.getElementsByClassName("songstitles")[0]
@@ -27,7 +24,7 @@ async function getSongs(folder){
         div = document.createElement("div")
         div.className = "librarysongcard"
         let childdiv = document.createElement("div")
-        childdiv.innerHTML = songs[i].title.split(".")[0]
+        childdiv.innerHTML = songs[i].name.split(".")[0]
         let span = document.createElement("span")
         span.className = "material-symbols-outlined"
         span.innerHTML = "play_arrow"
@@ -51,18 +48,13 @@ logo.addEventListener("click",()=>{
     location.reload()
 })
 function playaud(audio){
-    // let song = new Audio("/songs/"+audio) 
-    // console.log(song.src);
-    // song.play()
-    // song.addEventListener("loadeddata",()=>{
-    //     console.log(song.duration)
-    // })
-
-    currentSong.src = `./songs/${currFolder}`+audio.getElementsByTagName("div")[0].innerHTML+'.mp3'
+    
+    currentSong.src = `https://github.com/Vignesh9123/Spotify-clone/raw/main/songs/${currFolder}`+audio.getElementsByTagName("div")[0].innerHTML+'.mp3'
     
     currentSong.onplay= ()=>{isPlaying = true
     play.innerHTML = "pause"
-    currentSong.preload = "all"}
+    currentSong.preload = "all"
+}
     songtit = String(audio.getElementsByTagName("div")[0].innerHTML)
     songtit = songtit.split(".")
     if(document.querySelector(".songinfo").firstElementChild!=null){
@@ -94,17 +86,17 @@ function converttominutes(seconds){
 
   
 async function displayAlbums(){
-    let a = await fetch('https://github.com/Vignesh9123/Spotify-clone/raw/main/songs/')
-    let htm = await a.text();
-    let div = document.createElement("div")
-    div.innerHTML = htm
+        let a = await fetch(`https://github.com/Vignesh9123/Spotify-clone/tree/main/songs`)
+    let htm = await a.json()
+
    
-    let anchors = div.getElementsByTagName("a")
+    let anchors = htm.payload.tree.items
     for(let i= 0; i<anchors.length;i++){
         let cardscontainer = document.body.getElementsByClassName("tracks")[0]
         const e = anchors[i]
-        if(e.href.includes("songs/")){
-            let folder = e.href.split("/songs/")[1]
+        
+            
+            let folder = e.name
             let xm;
             let ht;
             try{
@@ -127,12 +119,11 @@ async function displayAlbums(){
                 console.log("No info found");
             }
         
-    }
+    
     }
     Array.from(document.getElementsByClassName("trackcard")).forEach(e=>{
         e.addEventListener("click",async()=>{
             currFolder = e.dataset.folder
-            console.log(currFolder);
             document.getElementsByClassName("songstitles")[0].innerHTML=""
             await getSongs(currFolder+'/')
         })
@@ -188,7 +179,6 @@ main()
 
 document.addEventListener('keyup', event => {
     if (event.code === 'Space') {
-    //   console.log('Space pressed')
     try {
         if(currentSong.paused && currentSong.src!=""){
             songtit = currentSong.src.split(`songs/${currFolder}`)[1].split(".")[0]
@@ -205,7 +195,7 @@ document.addEventListener('keyup', event => {
     
         
     } catch (error) {
-        console.log("Select a song")
+        document.querySelector(".songinfo").firstElementChild.innerHTML = "Select a song"
     }
     }
   })
@@ -256,7 +246,7 @@ currentSong.addEventListener("timeupdate",()=>{
 })
 menu.addEventListener("click",()=>{
     document.querySelector(".sidecontainer").style="left:0%;z-index:2;transition:left 0.5s linear;width:75vw"
-    console.log("Opened");
+   
 })
 document.getElementById("close").addEventListener("click", ()=>{
     document.querySelector(".sidecontainer").style="left:-60%;z-index:2;transition:left 0.5s linear;width:50vw"
@@ -267,12 +257,12 @@ previous.addEventListener("click",()=>{
     for(let i = 0; i < songs.length;i++){
         if((decodeURI(currentSong.src.split(`/songs/${currFolder}`)[1]) ==
         document.getElementById("titles").children[0].firstElementChild.innerHTML+'.mp3')){
-            console.log("Last");
+        
             playaud(document.getElementById("titles").children[songs.length-1])
             break
         }
-        if(songs[i].href == currentSong.src){
-            console.log("Previous");
+        if("https://github.com/Vignesh9123/Spotify-clone/raw/main/"+encodeURI(songs[i].path) == currentSong.src){
+       
             if(decodeURI(currentSong.src.split(`/songs/${currFolder}`)[1]) ==
             document.getElementById("titles").children[i].firstElementChild.innerHTML +'.mp3'){
                 playaud(document.getElementById("titles").children[i-1])
@@ -282,18 +272,18 @@ previous.addEventListener("click",()=>{
     }
 })
 next.addEventListener("click",()=>{
-    console.log("Next")
     for(let i = 0; i<songs.length;i++){
 
         if((decodeURI(currentSong.src.split(`/songs/${currFolder}`)[1]) ==
         document.getElementById("titles").children[songs.length-1].firstElementChild.innerHTML+".mp3")){
-            console.log("first")
+          
             playaud(document.getElementById("titles").children[0])
             break;
         }
-        if((songs[i].href) == (currentSong.src) && (decodeURI(currentSong.src.split(`/songs/${currFolder}`)[1])) ==
+        
+        if(("https://github.com/Vignesh9123/Spotify-clone/raw/main/"+encodeURI(songs[i].path)) == (currentSong.src) && (decodeURI(currentSong.src.split(`/songs/${currFolder}`)[1])) ==
        (document.getElementById("titles").children[i].firstElementChild.innerHTML+'.mp3')){
-            console.log("Nxttt");
+           
             playaud(document.getElementById("titles").children[i+1])
             break;
         }
@@ -311,9 +301,7 @@ volrange.addEventListener("input",(e)=>{
          else document.body.getElementsByClassName("volbar")[0].firstElementChild.innerHTML = "volume_up"
     
 })
-volrange.removeEventListener("keyup",()=>{
-    console.log("Down");
-})
+
 volrange.addEventListener("touchend",()=>{
     vollabel.style.display = "none"
     
