@@ -4,15 +4,15 @@
 }
 @font-face {
     font-family: 'Circularsp';
-    src: url("/fonts/CircularSpotifyText-Black.otf");
+    src: url("https://github.com/Vignesh9123/Spotify-clone/raw/main/fonts/CircularSpotifyText-Black.otf");
 }
 @font-face {
     font-family: 'Circularsp-light';
-    src: url("/fonts/CircularSpotifyText-Light.otf");
+    src: url("https://github.com/Vignesh9123/Spotify-clone/raw/main/fonts/CircularSpotifyText-Light.otf");
 }
 @font-face {
     font-family: 'Circularsp-bold';
-    src: url("/fonts/CircularSpotifyText-Bold.otf");
+    src: url("https://github.com/Vignesh9123/Spotify-clone/raw/main/fonts/CircularSpotifyText-Bold.otf");
 }
 *{
     margin: 0;
